@@ -11,4 +11,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/products": {
+        target: "http://www.braincoach.kr",
+        changeOrigin: true,
+        rewrite: (path) => path,
+      },
+    },
+  },
 });

@@ -6,6 +6,19 @@ export interface Product {
   title: string;
   companyName: string;
   content: string;
+  phoneNumber: string;
+  isActive: boolean;
+  startDate: string | null;
+  endDate: string | null;
+  postingPeriodType: string;
+  logoImage: { url: string; key: string };
+  productImage: { url: string; key: string };
+}
+
+export interface ProductListItem {
+  id: string;
+  title: string;
+  companyName: string;
   startDate: string | null;
   endDate: string | null;
   postingPeriodType: string;
@@ -14,7 +27,7 @@ export interface Product {
 }
 
 export interface ProductListResponse {
-  items: Product[];
+  items: ProductListItem[];
   totalItems: number;
   itemCount: number;
   itemsPerPage: number;
@@ -37,4 +50,33 @@ export const fetchProductList = async (
   });
 
   return response.data.data;
+};
+
+export const getProductById = async (id: string): Promise<Product> => {
+  const response = await axios.get(`http://www.braincoach.kr/products/${id}`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+    },
+  });
+
+  return response.data.data;
+};
+
+export const updateProduct = async (id: string, body: Partial<Product>) => {
+  const response = await axios.patch(`/products/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+    },
+  });
+  return response.data;
+};
+
+export const createProduct = async (body: Product | Partial<Product>) => {
+  const response = await axios.post("http://www.braincoach.kr/products", body, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return response.data;
 };
